@@ -4,16 +4,30 @@ body {
     color: #ececec;
     margin: 0;
     padding: 20px;
-    text-align: center;
+    text-align: left; /* Changed to left for column layout */
 }
 
-.container {
-    max-width: 800px;
+.main-content {
+    display: flex;
+    max-width: 1000px; /* Increased max-width for two columns */
     margin: 40px auto;
     padding: 20px;
     background-color: #333;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    gap: 40px; /* Space between columns */
+    align-items: flex-start; /* Align items to the top */
+}
+
+.left-column {
+    flex: 1; /* Takes available space */
+    min-width: 250px; /* Minimum width for the left column */
+    text-align: center; /* Center content within the left column */
+}
+
+.right-content {
+    flex: 2; /* Takes more space than the left column */
+    text-align: left;
 }
 
 .profile-pic {
@@ -35,6 +49,11 @@ p {
     line-height: 1.5;
 }
 
+.intro-text {
+    margin-bottom: 20px;
+    font-size: 1.1em;
+}
+
 a {
     color: #ffcc00;
     text-decoration: none;
@@ -53,6 +72,9 @@ button {
     cursor: pointer;
     font-size: 16px;
     margin-top: 20px;
+    display: block; /* Make button a block element to control margin */
+    margin-left: auto; /* Center button if needed, or align to right */
+    margin-right: auto; /* Center button if needed, or align to left */
 }
 
 button:hover {
