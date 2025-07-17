@@ -94,7 +94,7 @@
         snakeHeadImage.src = 'yuz.jpg';
         foodImage.src = 'pump.jpg';
 
-        const gridSize = 31;
+        const gridSize = 30;
         let snake = [{ x: 10, y: 10 }];
         let food = {};
         let score = 0;
@@ -157,7 +157,7 @@
                 case 'left': head.x -= 1; break;
                 case 'right': head.x += 1; break;
             }
-            const currentMapType = (level - 1) % 4;
+            const currentMapType = (level - 1) % 3;
 
             const tileCountX = board.width / gridSize;
             const tileCountY = board.height / gridSize;
@@ -216,12 +216,7 @@
                 const lineXStart = Math.floor(board.width / (3 * gridSize));
                 const lineXEnd = Math.floor(board.width * 2 / (3 * gridSize));
 
-                if ((head.y === line1Y || head.y === line2Y) && (head.x >= lineXStart && head.x <= lineXEnd)) return gameOver();
-            } else if (currentMapType === 3) { // Map Type 4: Cross maze
-                // Collision with horizontal part of the cross
-                if ((head.y === 9 || head.y === 10) && (head.x >= 5 && head.x <= 14)) return gameOver();
-                // Collision with vertical part of the cross
-                if ((head.x === 9 || head.x === 10) && (head.y >= 5 && head.y <= 14)) return gameOver();
+                if ((head.y === line1Y || head.y === line2Y) && (head.x >= lineXStart && head.x < lineXEnd)) return gameOver();
             }
             for (let i = 1; i < snake.length; i++) {
                 if (head.x === snake[i].x && head.y === snake[i].y) {
@@ -233,7 +228,7 @@
                 score++;
                 scoreInLevel++;
                 scoreElement.textContent = 'Pompa sayısı: ' + score;
-                if (scoreInLevel === 1) {
+                if (scoreInLevel === 10) {
                     level++;
                     levelElement.textContent = 'Level: ' + level;
                     scoreInLevel = 0;
@@ -349,7 +344,7 @@
             context.strokeStyle = 'white';
             context.lineWidth = 2;
 
-            const currentMapType = (level - 1) % 4;
+            const currentMapType = (level - 1) % 3;
 
             if (currentMapType === 1) { // Map Type 2: border walls
                 context.strokeRect(0, 0, board.width, board.height);
@@ -390,12 +385,6 @@
                 context.fillStyle = 'white';
                 context.fillRect(board.width / 3, 8 * gridSize, board.width / 3, gridSize);
                 context.fillRect(board.width / 3, 11 * gridSize, board.width / 3, gridSize);
-            } else if (currentMapType === 3) { // Map Type 4: Cross maze
-                context.fillStyle = 'white';
-                // Horizontal part of the cross
-                context.fillRect(board.width / 4, board.height / 2 - gridSize / 2, board.width / 2, gridSize);
-                // Vertical part of the cross
-                context.fillRect(board.width / 2 - gridSize / 2, board.height / 4, gridSize, board.height / 2);
             }
         }
     </script>
