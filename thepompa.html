@@ -102,13 +102,7 @@
     </div>
 
     <div id="controls">
-        <button id="up-button" class="control-button">Up</button>
-        <div class="horizontal-controls">
-            <button id="left-button" class="control-button">Left</button>
-            <button id="start-restart-button" class="control-button">Start/Restart</button>
-            <button id="right-button" class="control-button">Right</button>
-        </div>
-        <button id="down-button" class="control-button">Down</button>
+        <button id="start-restart-button" class="control-button">Start/Restart</button>
     </div>
 
     <script>
@@ -119,12 +113,11 @@
         const scoreElement = document.getElementById('score');
         const levelElement = document.getElementById('level');
         const controls = document.getElementById('controls');
-        const upButton = document.getElementById('up-button');
-        const downButton = document.getElementById('down-button');
-        const leftButton = document.getElementById('left-button');
-        const rightButton = document.getElementById('right-button');
         const startRestartButton = document.getElementById('start-restart-button');
         
+        let touchStartX = 0;
+        let touchStartY = 0;
+
         const snakeHeadImage = new Image();
         const foodImage = new Image();
 
@@ -403,16 +396,47 @@
         }
 
         document.addEventListener('keydown', handleKeyPress);
-
-        upButton.addEventListener('click', () => handleButtonPress('ArrowUp'));
-        downButton.addEventListener('click', () => handleButtonPress('ArrowDown'));
-        leftButton.addEventListener('click', () => handleButtonPress('ArrowLeft'));
-        rightButton.addEventListener('click', () => handleButtonPress('ArrowRight'));
         startRestartButton.addEventListener('click', () => handleButtonPress('Enter'));
+
+        board.addEventListener('touchstart', handleTouchStart, false);
+        board.addEventListener('touchend', handleTouchEnd, false);
 
         function handleButtonPress(key) {
             const event = new KeyboardEvent('keydown', { key: key });
             handleKeyPress(event);
+        }
+
+        function handleTouchStart(event) {
+            touchStartX = event.changedTouches[0].screenX;
+            touchStartY = event.changedTouches[0].screenY;
+        }
+
+        function handleTouchEnd(event) {
+            const touchEndX = event.changedTouches[0].screenX;
+            const touchEndY = event.changedTouches[0].screenY;
+
+            const diffX = touchEndX - touchStartX;
+            const diffY = touchEndY - touchStartY;
+
+            const swipeThreshold = 30; // Minimum distance for a swipe
+
+            if (Math.abs(diffX) > Math.abs(diffY)) { // Horizontal swipe
+                if (Math.abs(diffX) > swipeThreshold) {
+                    if (diffX > 0) {
+                        handleKeyPress({ key: 'ArrowRight' });
+                    } else {
+                        handleKeyPress({ key: 'ArrowLeft' });
+                    }
+                }
+            } else { // Vertical swipe
+                if (Math.abs(diffY) > swipeThreshold) {
+                    if (diffY > 0) {
+                        handleKeyPress({ key: 'ArrowDown' });
+                    } else {
+                        handleKeyPress({ key: 'ArrowUp' });
+                    }
+                }
+            }
         }
 
         function resizeGame() {
